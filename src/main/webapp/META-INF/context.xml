@@ -1,0 +1,5 @@
+<Context>
+  <Resource name="jdbc/TestDB" auth="Container" type="javax.sql.DataSource"
+               username="tomcat" password="tomcat" driverClassName="org.postgresql.Driver"
+               url="jdbc:postgresql://localhost/test"/>
+</Context>

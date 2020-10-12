@@ -4,8 +4,13 @@
  */
 package org.example.tomcat.database;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NameNotFoundException;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import java.sql.Connection; 
-import java.sql.DriverManager; 
 import java.sql.SQLException; 
 import java.sql.ResultSet; 
 import java.sql.Statement; 
@@ -15,19 +20,16 @@ public class DatabaseConnection {
 	protected static Connection initializeDatabase() 
 		throws SQLException, ClassNotFoundException 
 	{ 
-		// Initialize all the information regarding 
-		// Database Connection 
-		String dbURL = "jdbc:postgresql://localhost/";
-		// Database name to access 
-		String dbName = "test"; 
-		String dbUsername = "tomcat"; 
-		String dbPassword = "tomcat"; 
-
-                /* The class for the Driver needs to be loaded before connecting */
-                String dbDriver = "org.postgresql.Driver";
-                Class.forName(dbDriver);
-
-		Connection con = DriverManager.getConnection(dbURL + dbName, dbUsername, dbPassword);
+		// Read the connection from the web.xml Resource.
+		DataSource data;
+	        try {
+			Context initialContext = new InitialContext();
+			Context envContext = (Context) initialContext.lookup("java:comp/env");
+			data = (DataSource) envContext.lookup("jdbc/TestDB");
+		} catch (Exception e) {
+			throw new SQLException("Could not look up datasource", e);
+		}
+		Connection con = data.getConnection();
 
 		/* Check for the table and create it if needed */
 		ResultSet rset = con.getMetaData().getTables(null, null, "demo", null);
