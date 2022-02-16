@@ -11,7 +11,7 @@
 
   <properties>
       <tomcat.version>9.0.37</tomcat.version>
-      <postgresql.version>42.2.14</postgresql.version>
+      <postgresql.version>42.3.3</postgresql.version>
   </properties>
 
    <build>
